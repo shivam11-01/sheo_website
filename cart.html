@@ -1,0 +1,149 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <header>
+        <div id="menu-bar" class="fa fa-bars"></div>
+        <img src="https://firebasestorage.googleapis.com/v0/b/shoe-website-a514f.appspot.com/o/img%2Flogo.png?alt=media&token=f00127e0-a485-4410-888f-1f43ae03e3a1"
+            alt="" class="logo" />
+        <nav class="navbar">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#product">Product</a>
+            <a href="index.html#fearured">Fearured</a>
+            <a href="index.html#blog">blog</a>
+            <a href="index.html#news">news</a>
+        </nav>
+        <div class="icons">
+            <a href="#"><i class="fa fa-heart"></i></a>
+            <a href="#"><i class="fa fa-shopping-cart"></i></a>
+            <a href="#"><i class="fa fa-user"></i></a>
+        </div>
+    </header>
+    <section class="featured" id="cart" style="margin-top: 150px">
+        <div id="cartrow">
+            <!-- <div class="row">
+            <div class="image-container">
+                <div class="big-image">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/shoe-website-a514f.appspot.com/o/img%2Fproduct%201%2F1.jpg?alt=media&token=dce62795-8237-486c-b318-b951693a5436"
+                        alt="" class="big-image-1">
+                </div>
+            </div>
+            <div class="content">
+                <h3>new nike airmac shoes</h3>
+                <div class="stars">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugit officiis omnis quo laboriosam velit culpa ex illo, error enim nostrum?
+                </p>
+                <div class="price">$90 <span>$120</span></div>
+                
+            </div>
+        </div> -->
+        </div>
+    </section>
+    <section class="cridet" id="cridet">
+        <div class="box">
+            <h3>all reserved by codeskill</h3>
+        </div>
+    </section>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSiF7pI_co2e21EsvTAb_6-PHsw5wkBAk",
+            authDomain: "shoe-website-a514f.firebaseapp.com",
+            projectId: "shoe-website-a514f",
+            storageBucket: "shoe-website-a514f.appspot.com",
+            messagingSenderId: "908838887755",
+            appId: "1:908838887755:web:2b8a377e54748f881308ce",
+            measurementId: "G-N13V31Z3NW",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const cartRef = firebase.firestore().collection("cart");
+        let cart = [];
+        // Get all the shoes in the cart
+        function getCart() {
+            return cartRef.get();
+        }
+
+        getCart().then((querySnapshot) => {
+            querySnapshot.docs.map((doc) => {
+                let cartItem = doc.data();
+                let id = doc.id;
+                let __tmp = {
+                    id: doc.id,
+                    ...doc.data(),
+                };
+                cart.push(__tmp);
+                document.getElementById("cartrow").innerHTML += `
+                <div class="row">
+            <div class="image-container">
+                <div class="big-image">
+                    <img src=${cartItem.src}
+                        alt="" class="big-image-1">
+                </div>
+                <div style="position: absolute; top: 20; right: 20; cursor: pointer;">
+                    <a href="#" class="fa fa-trash fa-2x removeBTN" data-id=${id}></a>
+                </div>
+            </div>
+            <div class="content">
+                <h3>${cartItem.name}</h3>
+                <div class="stars">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Fugit officiis omnis quo laboriosam velit culpa ex illo, error enim nostrum?
+                </p>
+                <div class="price">$90 <span>$120</span></div>
+                
+            </div>
+        </div>
+                `;
+            });
+        });
+        const removeBTN = document.querySelectorAll(".removeBTN");
+        console.log(removeBTN)
+        removeBTN.forEach((button) => {
+            button.addEventListener("click", () => {
+                let _id = button.getAttribute("data-id");
+                console.log(_id);
+                removeFromCart(id);
+            });
+        });
+        function removeFromCart(id) {
+            cartRef.doc(id).delete()
+                .then(() => {
+                    console.log("Shoe removed from cart with ID: ", docId);
+                    toastr.success("Item removed from cart!");
+                })
+                .catch((error) => {
+                    console.error("Error removing item from cart: ", error);
+                    toastr.error("Error removing item from cart.");
+                });
+        }
+
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
